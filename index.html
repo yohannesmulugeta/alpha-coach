@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Alpha Coach">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Alpha Home Workout Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="splash-logo">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <rect width="64" height="64" rx="18" fill="#E8FF4A"/>
+        <path d="M20 44V24l12-8 12 8v20" stroke="#0a0a0a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="32" cy="22" r="4" fill="#0a0a0a"/>
+        <path d="M26 44v-8h12v8" stroke="#0a0a0a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1 class="splash-title">Alpha<br>Coach</h1>
+    <p class="splash-sub">Home Workout & Men's Health</p>
+    <div class="splash-loader"><div class="loader-bar"></div></div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding" class="screen hidden">
+  <div class="onboard-progress">
+    <div class="progress-track"><div id="progress-fill" class="progress-fill" style="width:0%"></div></div>
+    <span id="step-label" class="step-label">Step 1 of 9</span>
+  </div>
+
+  <div class="step active" data-step="1">
+    <div class="step-hero">
+      <div class="hero-emoji">💪</div>
+      <h2>Let's build your<br><span class="accent">Alpha Plan</span></h2>
+      <p>9 quick questions to create a personalized workout program — built around muscle gain, sexual health, and peak performance.</p>
+    </div>
+    <button class="btn-primary" onclick="nextStep()">Get Started →</button>
+    <p class="disclaimer">✅ Science-backed &nbsp; ✅ No equipment needed &nbsp; ✅ Private</p>
+  </div>
+
+  <div class="step hidden" data-step="2">
+    <h2>Your <span class="accent">basics</span></h2>
+    <p class="step-desc">Personalizes your plan and calculates your daily calorie target.</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" id="q-name" placeholder="e.g. Alex">
+        <span class="field-error" id="err-name"></span>
+      </div>
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" id="q-age" placeholder="25" min="16" max="80">
+        <span class="field-error" id="err-age"></span>
+      </div>
+      <div class="form-group">
+        <label>Weight (kg)</label>
+        <input type="number" id="q-weight" placeholder="70" min="40" max="300" step="0.1">
+        <span class="field-error" id="err-weight"></span>
+      </div>
+      <div class="form-group">
+        <label>Height (cm)</label>
+        <input type="number" id="q-height" placeholder="175" min="140" max="220">
+        <span class="field-error" id="err-height"></span>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="3">
+    <h2>Your primary <span class="accent">goal</span></h2>
+    <p class="step-desc">Your entire plan will be tuned for this.</p>
+    <div class="option-cards">
+      <div class="option-card" data-value="gain-weight" onclick="selectOption(this,'q-goal')">
+        <div class="option-icon">⚡</div>
+        <div class="option-text"><strong>Gain Weight & Size</strong><span>Build mass, eat more, grow bigger</span></div>
+      </div>
+      <div class="option-card" data-value="build-muscle" onclick="selectOption(this,'q-goal')">
+        <div class="option-icon">🔥</div>
+        <div class="option-text"><strong>Build Muscle</strong><span>Definition, strength, lean physique</span></div>
+      </div>
+      <div class="option-card" data-value="improve-strength" onclick="selectOption(this,'q-goal')">
+        <div class="option-icon">🏆</div>
+        <div class="option-text"><strong>Improve Strength</strong><span>Power, performance, functional fitness</span></div>
+      </div>
+    </div>
+    <input type="hidden" id="q-goal">
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="4">
+    <h2>Experience <span class="accent">level</span></h2>
+    <p class="step-desc">Sets the starting difficulty and how fast the plan progresses.</p>
+    <div class="option-cards">
+      <div class="option-card" data-value="beginner" onclick="selectOption(this,'q-level')">
+        <div class="option-icon">🌱</div>
+        <div class="option-text"><strong>Beginner</strong><span>New to training or returning after 6+ months</span></div>
+      </div>
+      <div class="option-card" data-value="intermediate" onclick="selectOption(this,'q-level')">
+        <div class="option-icon">⚙️</div>
+        <div class="option-text"><strong>Intermediate</strong><span>Consistent training for 3–18 months</span></div>
+      </div>
+      <div class="option-card" data-value="advanced" onclick="selectOption(this,'q-level')">
+        <div class="option-icon">🦅</div>
+        <div class="option-text"><strong>Advanced</strong><span>18+ months of structured training</span></div>
+      </div>
+    </div>
+    <input type="hidden" id="q-level">
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="5">
+    <h2>Daily time <span class="accent">available</span></h2>
+    <p class="step-desc">Sessions designed to fit your schedule exactly.</p>
+    <div class="option-cards">
+      <div class="option-card" data-value="15" onclick="selectOption(this,'q-time')">
+        <div class="option-icon">⚡</div>
+        <div class="option-text"><strong>10–20 min</strong><span>Quick & intense</span></div>
+      </div>
+      <div class="option-card" data-value="30" onclick="selectOption(this,'q-time')">
+        <div class="option-icon">🕐</div>
+        <div class="option-text"><strong>20–35 min</strong><span>Balanced sessions</span></div>
+      </div>
+      <div class="option-card" data-value="45" onclick="selectOption(this,'q-time')">
+        <div class="option-icon">🏅</div>
+        <div class="option-text"><strong>35–50 min</strong><span>Full programs</span></div>
+      </div>
+      <div class="option-card" data-value="60" onclick="selectOption(this,'q-time')">
+        <div class="option-icon">💯</div>
+        <div class="option-text"><strong>50–60 min</strong><span>Maximum gains</span></div>
+      </div>
+    </div>
+    <input type="hidden" id="q-time">
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="6">
+    <h2>Available <span class="accent">equipment</span></h2>
+    <p class="step-desc">Select all that apply — the plan adapts accordingly.</p>
+    <div class="checkbox-grid" id="equip-grid">
+      <label class="check-card"><input type="checkbox" value="none"><span>🙌 No equipment</span></label>
+      <label class="check-card"><input type="checkbox" value="chair"><span>🪑 Chair</span></label>
+      <label class="check-card"><input type="checkbox" value="bands"><span>🔗 Resistance bands</span></label>
+      <label class="check-card"><input type="checkbox" value="dumbbells"><span>🏋️ Dumbbells</span></label>
+      <label class="check-card"><input type="checkbox" value="pullbar"><span>⬆️ Pull-up bar</span></label>
+      <label class="check-card"><input type="checkbox" value="mat"><span>🧘 Yoga mat</span></label>
+    </div>
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="7">
+    <h2>Body focus <span class="accent">areas</span></h2>
+    <p class="step-desc">Where do you most want to build? (Select all)</p>
+    <div class="checkbox-grid">
+      <label class="check-card"><input type="checkbox" value="chest" class="focus-check"><span>💪 Chest</span></label>
+      <label class="check-card"><input type="checkbox" value="back" class="focus-check"><span>🔙 Back</span></label>
+      <label class="check-card"><input type="checkbox" value="arms" class="focus-check"><span>💪 Arms</span></label>
+      <label class="check-card"><input type="checkbox" value="shoulders" class="focus-check"><span>🦾 Shoulders</span></label>
+      <label class="check-card"><input type="checkbox" value="core" class="focus-check"><span>🎯 Core / Abs</span></label>
+      <label class="check-card"><input type="checkbox" value="legs" class="focus-check"><span>🦵 Legs</span></label>
+      <label class="check-card"><input type="checkbox" value="glutes" class="focus-check"><span>🍑 Glutes</span></label>
+      <label class="check-card"><input type="checkbox" value="full" class="focus-check"><span>⚡ Full body</span></label>
+    </div>
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="8">
+    <h2>Daily <span class="accent">reminder</span></h2>
+    <p class="step-desc">Apps with daily reminders have 4× better long-term adherence. When should we remind you?</p>
+    <div class="option-cards">
+      <div class="option-card" data-value="07:00" onclick="selectOption(this,'q-reminder')">
+        <div class="option-icon">🌅</div>
+        <div class="option-text"><strong>7:00 AM</strong><span>Start the day strong</span></div>
+      </div>
+      <div class="option-card" data-value="12:00" onclick="selectOption(this,'q-reminder')">
+        <div class="option-icon">☀️</div>
+        <div class="option-text"><strong>12:00 PM</strong><span>Lunchtime session</span></div>
+      </div>
+      <div class="option-card" data-value="18:00" onclick="selectOption(this,'q-reminder')">
+        <div class="option-icon">🌇</div>
+        <div class="option-text"><strong>6:00 PM</strong><span>After work</span></div>
+      </div>
+      <div class="option-card" data-value="none" onclick="selectOption(this,'q-reminder')">
+        <div class="option-icon">🔕</div>
+        <div class="option-text"><strong>No reminder</strong><span>I'll open the app myself</span></div>
+      </div>
+    </div>
+    <input type="hidden" id="q-reminder">
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="9">
+    <div class="kegel-intro">
+      <div class="kegel-badge">🔒 Private</div>
+      <h2>Men's pelvic health &<br><span class="accent">sexual performance</span></h2>
+      <div class="info-card">
+        <p><strong>Science-backed:</strong> Clinical trials show pelvic floor training produces:</p>
+        <ul>
+          <li>✅ <strong>40%</strong> of men regained normal erectile function (BJU Int.)</li>
+          <li>✅ <strong>88%</strong> improved premature ejaculation control</li>
+          <li>✅ Stronger erections &amp; longer sexual endurance</li>
+          <li>✅ More intense orgasms</li>
+        </ul>
+        <p class="sub-note">These are real peer-reviewed clinical studies, not marketing claims.</p>
+      </div>
+      <p class="step-desc">Include a <strong>daily Kegel + pelvic floor program</strong> in your plan?</p>
+    </div>
+    <div class="option-cards">
+      <div class="option-card" data-value="yes" onclick="selectOption(this,'q-kegel')">
+        <div class="option-icon">✅</div>
+        <div class="option-text"><strong>Yes — include it</strong><span>5–10 min daily, totally private</span></div>
+      </div>
+      <div class="option-card" data-value="no" onclick="selectOption(this,'q-kegel')">
+        <div class="option-icon">❌</div>
+        <div class="option-text"><strong>No thanks</strong><span>Workouts only</span></div>
+      </div>
+    </div>
+    <input type="hidden" id="q-kegel">
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="prevStep()">← Back</button>
+      <button class="btn-primary" onclick="generatePlan()">🚀 Generate My Plan</button>
+    </div>
+  </div>
+
+  <div class="step hidden" data-step="generating">
+    <div class="generating-screen">
+      <div class="gen-spinner"><svg viewBox="0 0 60 60" class="spin-svg"><circle cx="30" cy="30" r="26" fill="none" stroke="#E8FF4A" stroke-width="4" stroke-dasharray="40 120" stroke-linecap="round"/></svg></div>
+      <h2>Building your<br><span class="accent">Alpha Plan</span></h2>
+      <div id="gen-messages" class="gen-messages">
+        <p class="gen-msg active">Analyzing your profile...</p>
+        <p class="gen-msg">Calculating BMI and calorie target...</p>
+        <p class="gen-msg">Selecting optimal exercises...</p>
+        <p class="gen-msg">Programming progressive overload...</p>
+        <p class="gen-msg">Building your 7-day schedule...</p>
+        <p class="gen-msg">Adding pelvic floor program...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="showPage('dashboard')" data-page="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('workout')" data-page="workout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h4v16H6zM14 4h4v16h-4zM2 8h4M18 8h4M2 16h4M18 16h4"/></svg>
+      <span>Workout</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('kegel')" data-page="kegel" id="nav-kegel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Pelvic</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('progress')" data-page="progress">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Progress</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('export')" data-page="export">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+      <span>Share</span>
+    </button>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div class="page-scroll">
+      <div class="dash-header">
+        <div>
+          <p class="greeting" id="greeting">Good morning</p>
+          <h2 class="dash-title" id="dash-name">Ready to train?</h2>
+        </div>
+        <div class="streak-badge"><span id="streak-count">0</span><small>streak 🔥</small></div>
+      </div>
+
+      <div class="metrics-strip">
+        <div class="metric-pill"><span class="metric-label">BMI</span><span class="metric-val" id="m-bmi">—</span></div>
+        <div class="metric-pill"><span class="metric-label">Daily kcal</span><span class="metric-val" id="m-cals">—</span></div>
+        <div class="metric-pill"><span class="metric-label">Protein</span><span class="metric-val" id="m-protein">— g</span></div>
+      </div>
+
+      <div class="today-card" onclick="showPage('workout')">
+        <div class="today-card-inner">
+          <div class="today-label">TODAY</div>
+          <h3 id="today-day-name">Push Day</h3>
+          <p id="today-desc">Chest · Shoulders · Triceps</p>
+          <div class="today-meta">
+            <span id="today-exercises">6 exercises</span>
+            <span id="today-duration">35 min</span>
+          </div>
+          <button class="btn-start">Start Workout →</button>
+        </div>
+      </div>
+
+      <div class="overload-banner" id="overload-banner" style="display:none">
+        <span>📈</span>
+        <div><strong>Progressive Upgrade!</strong><p id="overload-msg">Week 2 — your reps and sets have increased.</p></div>
+      </div>
+
+      <section class="section">
+        <h3 class="section-title">Week Schedule</h3>
+        <div class="week-strip" id="week-strip"></div>
+      </section>
+
+      <section class="stats-row">
+        <div class="stat-card"><span class="stat-number" id="stat-workouts">0</span><span class="stat-label">Workouts</span></div>
+        <div class="stat-card"><span class="stat-number" id="stat-streak">0</span><span class="stat-label">Streak</span></div>
+        <div class="stat-card"><span class="stat-number" id="stat-week">0</span><span class="stat-label">This Week</span></div>
+      </section>
+
+      <div class="kegel-card" id="kegel-reminder-card" onclick="showPage('kegel')">
+        <div class="kegel-card-icon">🛡️</div>
+        <div><strong>Pelvic Floor Training</strong><p>5 min daily → stronger erections, better control</p></div>
+        <svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <section class="section">
+        <h3 class="section-title">Today's Nutrition Tip 🥗</h3>
+        <div class="tip-card" id="nutrition-tip"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- WORKOUT -->
+  <div id="page-workout" class="page hidden">
+    <div class="page-scroll">
+      <div class="workout-header">
+        <button class="back-btn" onclick="showPage('dashboard')">←</button>
+        <div>
+          <h2 id="workout-day-title">Push Day</h2>
+          <p id="workout-day-desc" class="workout-subtitle">Chest · Shoulders · Triceps</p>
+        </div>
+        <button class="complete-btn" onclick="completeWorkout()">Done ✓</button>
+      </div>
+      <div class="day-tabs" id="day-tabs"></div>
+      <div id="exercise-list" class="exercise-list"></div>
+    </div>
+  </div>
+
+  <!-- REST TIMER BAR (fixed above nav) -->
+  <div id="rest-timer-bar" class="rest-timer-bar hidden">
+    <div class="rest-inner">
+      <div class="rest-left">
+        <span class="rest-label">Rest timer</span>
+        <span class="rest-count" id="rest-count">60</span>
+      </div>
+      <div class="rest-track-wrap">
+        <div class="rest-track"><div class="rest-fill" id="rest-fill" style="width:100%"></div></div>
+      </div>
+      <button class="rest-skip-btn" onclick="skipRestTimer()">Skip ›</button>
+    </div>
+  </div>
+
+  <!-- KEGEL -->
+  <div id="page-kegel" class="page hidden">
+    <div class="page-scroll">
+      <div class="kegel-header">
+        <button class="back-btn" onclick="showPage('dashboard')">←</button>
+        <h2>Pelvic Floor Training</h2>
+      </div>
+      <div class="kegel-science-box">
+        <h3>🔬 The Science</h3>
+        <p>Your <strong>ischiocavernosus</strong> and <strong>bulbocavernosus</strong> muscles pump blood into the penis during erection. Stronger = harder, longer-lasting erections.</p>
+        <p>The <strong>pubococcygeus (PC) muscle</strong> controls ejaculation. Strengthening it lets you voluntarily delay orgasm — the key to lasting longer in bed.</p>
+      </div>
+      <div class="kegel-levels">
+        <button class="level-btn active" onclick="setKegelLevel('beginner')">Beginner</button>
+        <button class="level-btn" onclick="setKegelLevel('intermediate')">Intermediate</button>
+        <button class="level-btn" onclick="setKegelLevel('advanced')">Advanced</button>
+      </div>
+      <details class="info-details">
+        <summary>How to find your pelvic floor muscles</summary>
+        <div class="details-content">
+          <p>Try to <strong>stop urinating midstream</strong> — those muscles are your pelvic floor. Use this once to identify them; don't practice during urination regularly.</p>
+          <p>Alternatively, try <strong>pulling your scrotum upward</strong> without tensing your abs, glutes, or thighs.</p>
+        </div>
+      </details>
+      <details class="info-details">
+        <summary>Common mistakes to avoid</summary>
+        <div class="details-content">
+          <ul>
+            <li>❌ Squeezing glutes — isolate pelvic floor only</li>
+            <li>❌ Holding breath — breathe normally throughout</li>
+            <li>❌ Tensing abs or thighs — keep them relaxed</li>
+            <li>❌ Skipping the release — it's as important as the squeeze</li>
+            <li>❌ Too many reps too fast — quality beats quantity</li>
+          </ul>
+        </div>
+      </details>
+      <div id="kegel-exercises"></div>
+      <div class="kegel-session-cta">
+        <button class="btn-primary" onclick="startKegelSession()">▶ Start Guided Session (5–8 min)</button>
+      </div>
+
+      <!-- Kegel guided modal -->
+      <div id="kegel-modal" class="modal-overlay hidden">
+        <div class="modal-sheet">
+          <div class="modal-top">
+            <h3 id="kegel-ex-name">Basic Hold</h3>
+            <p id="kegel-ex-instruction"></p>
+          </div>
+          <div class="kegel-timer-ring">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="#1a1a1a" stroke-width="8"/>
+              <circle id="timer-ring" cx="60" cy="60" r="50" fill="none" stroke="#E8FF4A" stroke-width="8"
+                stroke-dasharray="314" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div class="timer-center">
+              <span id="timer-count">5</span>
+              <small id="timer-phase">SQUEEZE</small>
+            </div>
+          </div>
+          <div class="kegel-progress-row">
+            <span>Round <span id="kegel-round">1</span> of <span id="kegel-total-rounds">10</span></span>
+            <span id="kegel-phase-label">Contracting</span>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-ghost" onclick="closeKegelSession()">End</button>
+            <button class="btn-primary" id="kegel-pause-btn" onclick="toggleKegelPause()">⏸ Pause</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kegel complete -->
+      <div id="kegel-complete" class="modal-overlay hidden">
+        <div class="modal-sheet" style="text-align:center;padding:2rem">
+          <div style="font-size:3.5rem;margin-bottom:1rem">🏆</div>
+          <h2 style="margin-bottom:0.5rem">Session Complete!</h2>
+          <p style="color:var(--text2);font-size:0.9rem;line-height:1.6;margin-bottom:1.5rem">Results appear in 4–6 weeks of consistent daily training. You're building real sexual performance improvements.</p>
+          <button class="btn-primary" onclick="closeKegelComplete()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="page-progress" class="page hidden">
+    <div class="page-scroll">
+      <div class="page-header-simple"><h2>Your Progress</h2></div>
+      <div class="progress-stats">
+        <div class="prog-stat"><div class="prog-number" id="prog-total">0</div><div class="prog-label">Total</div></div>
+        <div class="prog-stat"><div class="prog-number" id="prog-week">0</div><div class="prog-label">This Week</div></div>
+        <div class="prog-stat"><div class="prog-number" id="prog-kegel-total">0</div><div class="prog-label">Kegel</div></div>
+      </div>
+      <section class="section">
+        <h3 class="section-title">Calendar</h3>
+        <div id="cal-grid" class="cal-grid"></div>
+        <div class="cal-legend"><span class="leg-dot" style="background:#22c55e"></span>Workout &nbsp;<span class="leg-dot" style="background:rgba(232,255,74,0.5)"></span>Kegel only &nbsp;<span class="leg-dot" style="background:transparent;border:1px solid var(--accent)"></span>Today</div>
+      </section>
+      <section class="section">
+        <h3 class="section-title">Muscles Trained This Week</h3>
+        <div id="muscle-bars" class="muscle-bars"></div>
+      </section>
+      <section class="section">
+        <h3 class="section-title">Weight Chart</h3>
+        <div class="weight-log-input">
+          <input type="number" id="weight-log-val" placeholder="Today's weight (kg)" step="0.1">
+          <button class="btn-sm" onclick="logWeight()">Log</button>
+        </div>
+        <canvas id="weight-chart" class="weight-chart"></canvas>
+        <div id="weight-history" class="weight-history"></div>
+      </section>
+      <section class="section">
+        <h3 class="section-title">Workout History</h3>
+        <div id="workout-history-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- EXPORT -->
+  <div id="page-export" class="page hidden">
+    <div class="page-scroll">
+      <div class="page-header-simple"><h2>Share & Export</h2></div>
+      <div class="export-options">
+        <div class="export-card" onclick="copyWorkout()"><div class="export-icon">📋</div><div><strong>Copy</strong><p>To clipboard</p></div></div>
+        <div class="export-card" onclick="emailWorkout()"><div class="export-icon">📧</div><div><strong>Email</strong><p>Open mail app</p></div></div>
+        <div class="export-card" onclick="downloadPDF()"><div class="export-icon">📄</div><div><strong>PDF</strong><p>Save or print</p></div></div>
+        <div class="export-card" onclick="shareWorkout()"><div class="export-icon">🔗</div><div><strong>Share</strong><p>WhatsApp etc.</p></div></div>
+      </div>
+      <div class="export-preview">
+        <h3>Plan Preview</h3>
+        <pre id="export-preview-text" class="preview-text"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- Exercise detail modal -->
+<div id="ex-modal" class="modal-overlay hidden">
+  <div class="modal-sheet ex-sheet">
+    <button class="modal-close" onclick="closeExModal()">✕</button>
+    <div id="ex-modal-content"></div>
+  </div>
+</div>
+
+<!-- Set log modal -->
+<div id="setlog-modal" class="modal-overlay hidden">
+  <div class="modal-sheet" style="padding:1.5rem">
+    <h3 style="font-family:'Syne',sans-serif;margin-bottom:0.3rem" id="setlog-title">Log Set</h3>
+    <p style="font-size:0.8rem;color:var(--text2);margin-bottom:1rem" id="setlog-subtitle">How many reps did you do?</p>
+    <input type="number" id="setlog-reps" placeholder="e.g. 12" min="1" max="200" style="width:100%;font-size:2rem;text-align:center;padding:0.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Syne',sans-serif;margin-bottom:1rem">
+    <div style="display:flex;gap:0.75rem">
+      <button class="btn-ghost" onclick="closeSetLog()" style="flex:1">Cancel</button>
+      <button class="btn-primary" onclick="saveSetLog()" style="flex:1">Save + Rest Timer</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
