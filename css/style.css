@@ -1,4 +1,4 @@
-/* ALPHA HOME WORKOUT COACH — v2 stylesheet */
+/* ALPHA HOME WORKOUT COACH — v3 stylesheet */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
@@ -199,8 +199,11 @@ h1,h2,h3{font-family:'Syne',sans-serif}
 .ex-card:hover{border-color:rgba(232,255,74,.3);transform:translateY(-2px)}
 .ex-card.done{opacity:.55}
 
-.ex-image{width:88px;flex-shrink:0;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative}
+/* ── EXERCISE ANIMATION WRAPPER ── */
+.ex-anim-wrap{width:88px;flex-shrink:0;background:var(--bg4);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:4px}
+.ex-anim-wrap svg{width:80px;height:auto;max-height:72px}
 .ex-muscle-svg{width:60px;height:60px;opacity:.8}
+
 .ex-info{flex:1;padding:1rem}
 .ex-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.3rem}
 .ex-sets{font-size:.8rem;color:var(--accent);font-weight:600;margin-bottom:.3rem}
@@ -217,7 +220,7 @@ h1,h2,h3{font-family:'Syne',sans-serif}
 .ex-yt-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:#ff0000;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .18s}
 .ex-yt-btn:hover{background:rgba(255,0,0,.1);border-color:rgba(255,0,0,.4)}
 
-/* Sets log history under each exercise */
+/* Set log history */
 .set-log-history{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem}
 .set-log-pill{font-size:.7rem;padding:.2rem .55rem;background:rgba(232,255,74,.12);border:1px solid rgba(232,255,74,.25);border-radius:99px;color:var(--accent)}
 
@@ -236,6 +239,16 @@ h1,h2,h3{font-family:'Syne',sans-serif}
 /* ── KEGEL ── */
 .kegel-header{display:flex;align-items:center;gap:1rem;padding:calc(env(safe-area-inset-top,0px) + .5rem) 0 1rem}
 .kegel-header h2{font-size:1.4rem;font-weight:800}
+
+/* Kegel How It Works section */
+.kegel-how-it-works{margin-bottom:1.25rem}
+.kegel-anatomy-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.75rem}
+.kegel-anatomy-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .5rem;text-align:center}
+.kegel-anatomy-card p{font-size:.72rem;color:var(--text2);margin-top:.4rem;line-height:1.4}
+.kegel-anatomy-card strong{color:var(--text);font-size:.78rem;display:block}
+.kegel-anim-small{width:52px;height:52px;margin:0 auto .35rem}
+.kegel-anim-small svg{width:100%;height:100%}
+
 .kegel-science-box{background:linear-gradient(135deg,rgba(232,255,74,.07),rgba(232,255,74,.02));border:1px solid rgba(232,255,74,.2);border-radius:var(--radius);padding:1.2rem;margin-bottom:1.2rem}
 .kegel-science-box h3{font-size:.9rem;margin-bottom:.6rem;color:var(--accent)}
 .kegel-science-box p{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:.5rem}
@@ -251,7 +264,7 @@ h1,h2,h3{font-family:'Syne',sans-serif}
 .details-content p{margin-bottom:.5rem}
 .kegel-ex-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:.75rem}
 .kegel-ex-item h4{font-family:'Syne',sans-serif;font-size:1rem;margin-bottom:.3rem}
-.kegel-timing{display:flex;gap:1rem;margin:.5rem 0;font-size:.8rem;color:var(--accent);font-weight:600}
+.kegel-timing{display:flex;gap:1rem;margin:.5rem 0;font-size:.8rem;color:var(--accent);font-weight:600;flex-wrap:wrap}
 .kegel-ex-item p{font-size:.82rem;color:var(--text2);line-height:1.5}
 .kegel-session-cta{margin:1.5rem 0}
 
@@ -280,7 +293,7 @@ h1,h2,h3{font-family:'Syne',sans-serif}
 .ex-modal-yt:hover{background:rgba(255,0,0,.18)}
 
 /* kegel timer */
-.kegel-timer-ring{position:relative;width:160px;height:160px;margin:1.5rem auto}
+.kegel-timer-ring{position:relative;width:160px;height:160px;margin:0.5rem auto 1rem}
 .kegel-timer-ring svg{width:100%;height:100%}
 .timer-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #timer-count{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--accent)}
@@ -341,3 +354,35 @@ h1,h2,h3{font-family:'Syne',sans-serif}
 .toast.success{background:var(--green);color:#fff}
 .toast.error-t{background:var(--red);color:#fff}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ── GIF DEMO IN EXERCISE MODAL ── */
+.ex-gif-hint{position:absolute;bottom:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(232,255,74,.9);color:#0a0a0a;font-size:.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;pointer-events:none}
+
+.ex-modal-gif-wrap{margin-bottom:1.2rem}
+.ex-modal-gif-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem}
+.ex-modal-gif-container{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;min-height:160px;display:flex;align-items:center;justify-content:center}
+.ex-modal-gif{width:100%;max-height:260px;object-fit:contain;display:block;border-radius:var(--radius)}
+.gif-fallback{text-align:center;padding:2rem;color:var(--text3);font-size:2.5rem;line-height:1.4}
+.gif-fallback small{display:block;font-size:.75rem;margin-top:.4rem}
+
+/* ── KEGEL HOW-TO SECTION ── */
+.kegel-ex-header{margin-bottom:.75rem}
+.kegel-how-to{background:rgba(232,255,74,.04);border:1px solid rgba(232,255,74,.12);border-radius:var(--radius-sm);padding:.9rem;margin:.6rem 0}
+.kegel-how-label{font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem;font-weight:700}
+.kegel-anatomy-visual{display:flex;gap:.9rem;align-items:flex-start}
+.anatomy-diagram{flex-shrink:0}
+.anatomy-diagram svg .pf-muscle{animation:pulse-pf 2s ease-in-out infinite}
+@keyframes pulse-pf{0%,100%{opacity:.35}50%{opacity:.7}}
+.kegel-how-text{flex:1;font-size:.82rem;color:var(--text2);line-height:1.6}
+
+/* ── UPDATED EXERCISE MODAL YOUTUBE BTN ── */
+.ex-modal-yt{display:flex;align-items:center;gap:.75rem;background:rgba(255,0,0,.1);border:1px solid rgba(255,0,0,.3);border-radius:var(--radius-sm);padding:.9rem 1rem;text-decoration:none;color:var(--text);margin-top:1rem;font-size:.9rem;transition:background .18s}
+.ex-modal-yt:hover{background:rgba(255,0,0,.18)}
+
+/* ── EX YOUTUBE BTN (card) ── */
+.ex-yt-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:var(--text2);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.ex-yt-btn:hover{background:rgba(232,255,74,.1);border-color:var(--accent);color:var(--accent)}
+
+/* ── 5-6 DAY SCHEDULE IMPROVEMENTS ── */
+.day-tabs{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.75rem;margin-bottom:1rem;scrollbar-width:none}
+.day-tab{flex-shrink:0;padding:.45rem .75rem;background:var(--bg3);border:1px solid var(--border);border-radius:99px;font-size:.7rem;color:var(--text2);cursor:pointer;transition:all .18s;white-space:nowrap}
