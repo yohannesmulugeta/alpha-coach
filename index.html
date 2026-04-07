@@ -159,15 +159,24 @@
   </div>
 
   <div class="step hidden" data-step="6">
-    <h2>Available <span class="accent">equipment</span></h2>
-    <p class="step-desc">Select all that apply — the plan adapts accordingly.</p>
-    <div class="checkbox-grid" id="equip-grid">
-      <label class="check-card"><input type="checkbox" value="none"><span>🙌 No equipment</span></label>
-      <label class="check-card"><input type="checkbox" value="chair"><span>🪑 Chair</span></label>
-      <label class="check-card"><input type="checkbox" value="bands"><span>🔗 Resistance bands</span></label>
-      <label class="check-card"><input type="checkbox" value="dumbbells"><span>🏋️ Dumbbells</span></label>
-      <label class="check-card"><input type="checkbox" value="pullbar"><span>⬆️ Pull-up bar</span></label>
-      <label class="check-card"><input type="checkbox" value="mat"><span>🧘 Yoga mat</span></label>
+    <h2>Zero <span class="accent">equipment</span> needed</h2>
+    <p class="step-desc">Every exercise in this program uses only your bodyweight — no gym, no gear, no excuses.</p>
+    <div class="option-cards">
+      <div class="option-card selected" data-value="none" onclick="selectOption(this,'q-equip')" style="border-color:var(--accent);background:var(--accent-dim)">
+        <div class="option-icon">🙌</div>
+        <div class="option-text"><strong>Bodyweight Only</strong><span>Floor space + your body = all you need</span></div>
+      </div>
+    </div>
+    <input type="hidden" id="q-equip" value="none">
+    <div class="info-card" style="margin-top:1rem">
+      <p><strong style="color:var(--accent)">What you'll use:</strong></p>
+      <ul>
+        <li>✅ <strong>Floor space</strong> — for push-ups, planks, leg raises</li>
+        <li>✅ <strong>A wall</strong> — for wall sits, pike press</li>
+        <li>✅ <strong>A chair or step</strong> (optional) — for tricep dips, step-ups</li>
+        <li>✅ <strong>A sturdy table</strong> (optional) — for inverted rows</li>
+        <li>✅ <strong>A doorframe</strong> (optional) — for doorway rows</li>
+      </ul>
     </div>
     <div class="step-nav">
       <button class="btn-ghost" onclick="prevStep()">← Back</button>
@@ -196,7 +205,7 @@
 
   <div class="step hidden" data-step="8">
     <h2>Daily <span class="accent">reminder</span></h2>
-    <p class="step-desc">Apps with daily reminders have 4× better long-term adherence. When should we remind you?</p>
+    <p class="step-desc">Apps with daily reminders have 4× better long-term adherence.</p>
     <div class="option-cards">
       <div class="option-card" data-value="07:00" onclick="selectOption(this,'q-reminder')">
         <div class="option-icon">🌅</div>
@@ -264,7 +273,7 @@
         <p class="gen-msg">Calculating BMI and calorie target...</p>
         <p class="gen-msg">Selecting optimal exercises...</p>
         <p class="gen-msg">Programming progressive overload...</p>
-        <p class="gen-msg">Building your 7-day schedule...</p>
+        <p class="gen-msg">Building your 5–6 day schedule...</p>
         <p class="gen-msg">Adding pelvic floor program...</p>
       </div>
     </div>
@@ -371,7 +380,7 @@
     </div>
   </div>
 
-  <!-- REST TIMER BAR (fixed above nav) -->
+  <!-- REST TIMER BAR -->
   <div id="rest-timer-bar" class="rest-timer-bar hidden">
     <div class="rest-inner">
       <div class="rest-left">
@@ -392,16 +401,58 @@
         <button class="back-btn" onclick="showPage('dashboard')">←</button>
         <h2>Pelvic Floor Training</h2>
       </div>
+
+      <!-- Animated visual of how kegel works -->
+      <div class="kegel-how-it-works">
+        <h3 class="section-title">How It Works</h3>
+        <div class="kegel-anatomy-cards">
+          <div class="kegel-anatomy-card">
+            <div class="kegel-anim-small">
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <style>.k1{animation:kpulse 1.5s ease-in-out infinite;transform-origin:40px 40px}@keyframes kpulse{0%,100%{transform:scale(1)}50%{transform:scale(0.75)}}</style>
+                <circle cx="40" cy="40" r="30" fill="rgba(232,255,74,0.08)" stroke="#333" stroke-width="1"/>
+                <circle class="k1" cx="40" cy="40" r="20" fill="rgba(232,255,74,0.15)" stroke="#E8FF4A" stroke-width="2.5"/>
+              </svg>
+            </div>
+            <p><strong>Squeeze</strong><br>Contract the pelvic floor upward</p>
+          </div>
+          <div class="kegel-anatomy-card">
+            <div class="kegel-anim-small">
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <style>.k2{animation:kexpand 1.5s ease-in-out infinite;transform-origin:40px 40px}@keyframes kexpand{0%,100%{transform:scale(0.75)}50%{transform:scale(1.05)}}</style>
+                <circle cx="40" cy="40" r="30" fill="rgba(59,130,246,0.08)" stroke="#333" stroke-width="1"/>
+                <circle class="k2" cx="40" cy="40" r="20" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="2.5"/>
+              </svg>
+            </div>
+            <p><strong>Release</strong><br>Fully relax, let muscles expand</p>
+          </div>
+          <div class="kegel-anatomy-card">
+            <div class="kegel-anim-small">
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <style>.k3{animation:kbreathe 3s ease-in-out infinite;transform-origin:40px 40px}@keyframes kbreathe{0%,100%{transform:scale(0.85)}50%{transform:scale(1)}}
+                .karrow{animation:karrowmove 3s ease-in-out infinite}@keyframes karrowmove{0%,100%{opacity:0.4}50%{opacity:1}}</style>
+                <circle cx="40" cy="40" r="30" fill="rgba(34,197,94,0.08)" stroke="#333" stroke-width="1"/>
+                <circle class="k3" cx="40" cy="40" r="20" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="2"/>
+                <text class="karrow" x="40" y="45" text-anchor="middle" fill="#22c55e" font-size="14">↑</text>
+              </svg>
+            </div>
+            <p><strong>Breathe</strong><br>Never hold your breath</p>
+          </div>
+        </div>
+      </div>
+
       <div class="kegel-science-box">
         <h3>🔬 The Science</h3>
         <p>Your <strong>ischiocavernosus</strong> and <strong>bulbocavernosus</strong> muscles pump blood into the penis during erection. Stronger = harder, longer-lasting erections.</p>
-        <p>The <strong>pubococcygeus (PC) muscle</strong> controls ejaculation. Strengthening it lets you voluntarily delay orgasm — the key to lasting longer in bed.</p>
+        <p>The <strong>PC muscle</strong> controls ejaculation. Strengthening it lets you voluntarily delay orgasm — the key to lasting longer.</p>
       </div>
+
       <div class="kegel-levels">
         <button class="level-btn active" onclick="setKegelLevel('beginner')">Beginner</button>
         <button class="level-btn" onclick="setKegelLevel('intermediate')">Intermediate</button>
         <button class="level-btn" onclick="setKegelLevel('advanced')">Advanced</button>
       </div>
+
       <details class="info-details">
         <summary>How to find your pelvic floor muscles</summary>
         <div class="details-content">
@@ -409,6 +460,7 @@
           <p>Alternatively, try <strong>pulling your scrotum upward</strong> without tensing your abs, glutes, or thighs.</p>
         </div>
       </details>
+
       <details class="info-details">
         <summary>Common mistakes to avoid</summary>
         <div class="details-content">
@@ -421,7 +473,9 @@
           </ul>
         </div>
       </details>
+
       <div id="kegel-exercises"></div>
+
       <div class="kegel-session-cta">
         <button class="btn-primary" onclick="startKegelSession()">▶ Start Guided Session (5–8 min)</button>
       </div>
@@ -433,6 +487,10 @@
             <h3 id="kegel-ex-name">Basic Hold</h3>
             <p id="kegel-ex-instruction"></p>
           </div>
+
+          <!-- Animated visual inside the timer -->
+          <div id="kegel-anim-svg" style="width:80px;height:80px;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center"></div>
+
           <div class="kegel-timer-ring">
             <svg viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="50" fill="none" stroke="#1a1a1a" stroke-width="8"/>
@@ -444,6 +502,7 @@
               <small id="timer-phase">SQUEEZE</small>
             </div>
           </div>
+
           <div class="kegel-progress-row">
             <span>Round <span id="kegel-round">1</span> of <span id="kegel-total-rounds">10</span></span>
             <span id="kegel-phase-label">Contracting</span>
