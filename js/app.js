@@ -1,8 +1,6 @@
-// ALPHA HOME WORKOUT COACH — v2 (all bugs fixed)
-// Fixes: streak bug, progressive overload, rest timer, kegel crash,
-// inline field validation, BMI/calories, name field, page transitions,
-// weight chart, workout history, set logging, PDF iOS fix, haptics,
-// reminder notifications, completion date bug, onboarding back-nav
+// ALPHA HOME WORKOUT COACH — v3
+// Updates: GIF demos, how-to images in kegel, fixed YouTube links,
+// 5-6 day plans, no-equipment exercises, improved exercise modal
 
 // ── STATE ──
 let currentStep = 1;
@@ -16,7 +14,7 @@ let kegelSessionState = {};
 let restTimerInterval = null;
 let restDuration = 60;
 let restRemaining = 60;
-let pendingSetLog = null; // {exKey, setNum}
+let pendingSetLog = null;
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
@@ -64,7 +62,6 @@ function showStep(n) {
   if (t) { t.classList.remove('hidden'); t.classList.add('active'); }
 }
 
-// FIX: inline field validation — highlight the exact broken field
 function clearErrors() {
   document.querySelectorAll('.field-error').forEach(e => e.textContent = '');
   document.querySelectorAll('.form-group input').forEach(i => i.classList.remove('error'));
@@ -113,12 +110,10 @@ function prevStep() {
     currentStep--;
     updateProgress();
     showStep(currentStep);
-    // FIX: restore visual state of option cards when going back
     restoreSelections();
   }
 }
 
-// FIX: back navigation restores card selected state visually
 function restoreSelections() {
   const map = {
     'q-goal': '.step[data-step="3"] .option-card',
@@ -179,11 +174,10 @@ function generatePlan() {
     userProfile.workoutsDone = [];
     userProfile.kegelDone = [];
     userProfile.weightLog = [];
-    userProfile.workoutLog = {}; // {dateKey: {dayName, exercises:[{name,sets}]}}
-    userProfile.setLog = {};    // {dateKey-exKey: [{set:1,reps:12},...]}
+    userProfile.workoutLog = {};
+    userProfile.setLog = {};
     userProfile.weeksCompleted = 0;
 
-    // Schedule notification if requested
     if (userProfile.reminder !== 'none') scheduleReminder(userProfile.reminder);
 
     saveProfile();
@@ -192,13 +186,10 @@ function generatePlan() {
   }, 3000);
 }
 
-// ── NOTIFICATIONS ──
 async function scheduleReminder(time) {
   if (!('Notification' in window)) return;
   const perm = await Notification.requestPermission();
   if (perm !== 'granted') return;
-  // Store the desired time; service worker would handle recurring notifications
-  // For now show a confirmation
   showToast(`Reminder set for ${time} ✓`, 'success');
 }
 
@@ -220,7 +211,6 @@ function initApp() {
   showPage('dashboard');
 }
 
-// FIX: Page transitions with CSS animation
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => {
     p.classList.remove('active');
@@ -242,38 +232,31 @@ function showPage(name) {
 }
 
 // ── PROGRESSIVE OVERLOAD ──
-// FIX: actually calculates and applies overload based on weeks since creation
 function applyProgressiveOverload() {
   const created = new Date(userProfile.createdAt || new Date().toISOString());
   const now = new Date();
   const daysDiff = Math.floor((now - created) / (1000 * 60 * 60 * 24));
   const weeksElapsed = Math.floor(daysDiff / 7);
 
-  if (weeksElapsed === userProfile.weeksCompleted) return; // no change
+  if (weeksElapsed === userProfile.weeksCompleted) return;
 
   userProfile.weeksCompleted = weeksElapsed;
   const level = userProfile.level || 'beginner';
 
-  // Every 2 weeks: add 1 rep to reps, every 4 weeks: add 1 set (capped)
   weekPlan.forEach(day => {
     day.exercises.forEach(exKey => {
       const ex = EXERCISES[exKey];
       if (!ex) return;
       const vars = ex.variations[level];
       if (!vars) return;
-
-      // Store the overloaded values per-exercise
       const storeKey = `overload-${exKey}-${level}`;
       let stored = JSON.parse(localStorage.getItem(storeKey) || 'null');
-      if (!stored) {
-        stored = { sets: vars.sets, reps: vars.reps, weeks: 0 };
-      }
-      const newWeeks = weeksElapsed;
-      const extraSets = Math.floor(newWeeks / 4);
-      const extraReps = (newWeeks % 4) * 1; // +1 rep per 2 weeks within the 4-week cycle
+      if (!stored) stored = { sets: vars.sets, reps: vars.reps, weeks: 0 };
+      const extraSets = Math.floor(weeksElapsed / 4);
+      const extraReps = (weeksElapsed % 4) * 1;
       stored.sets = Math.min(vars.sets + extraSets, vars.sets + 2);
       stored.reps = typeof vars.reps === 'string' ? vars.reps : Math.min(vars.reps + extraReps, vars.reps + 6);
-      stored.weeks = newWeeks;
+      stored.weeks = weeksElapsed;
       localStorage.setItem(storeKey, JSON.stringify(stored));
     });
   });
@@ -301,7 +284,6 @@ function getOverloadedVars(exKey, level) {
 }
 
 // ── BMI & CALORIES ──
-// FIX: actually calculate and display these from onboarding data
 function calcMetrics() {
   const w = userProfile.weight;
   const h = userProfile.height;
@@ -309,17 +291,14 @@ function calcMetrics() {
   if (!w || !h || !age) return null;
 
   const bmi = w / ((h / 100) ** 2);
-  // Mifflin-St Jeor for men
   const bmr = 10 * w + 6.25 * h - 5 * age + 5;
-  // Moderate activity multiplier (1.55), then add surplus for weight gain goal
   let tdee = bmr * 1.55;
   if (userProfile.goal === 'gain-weight') tdee += 400;
-  const protein = Math.round(w * 1.8); // 1.8g per kg for muscle building
+  const protein = Math.round(w * 1.8);
 
   return { bmi: bmi.toFixed(1), cals: Math.round(tdee), protein };
 }
 
-// FIX: correct streak calculation — checks consecutive calendar days properly
 function calcStreak() {
   const done = userProfile.workoutsDone || [];
   if (!done.length) return 0;
@@ -335,7 +314,6 @@ function calcStreak() {
     if (done.includes(key)) {
       streak++;
     } else if (i === 0) {
-      // Today not done yet — check yesterday
       continue;
     } else {
       break;
@@ -348,7 +326,6 @@ function getTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-// FIX: getDateKey uses actual calendar dates for current week
 function getDateKey(dayOffset) {
   const today = new Date();
   const jsDay = today.getDay();
@@ -392,7 +369,6 @@ function renderDashboard() {
       today.duration ? `~${today.duration} min` : '';
   }
 
-  // Metrics
   const m = calcMetrics();
   if (m) {
     document.getElementById('m-bmi').textContent = m.bmi;
@@ -400,7 +376,6 @@ function renderDashboard() {
     document.getElementById('m-protein').textContent = m.protein + 'g';
   }
 
-  // Week strip
   const strip = document.getElementById('week-strip');
   strip.innerHTML = '';
   const dayNames = ['M','T','W','T','F','S','S'];
@@ -416,20 +391,17 @@ function renderDashboard() {
     strip.appendChild(div);
   });
 
-  // Stats
   const streak = calcStreak();
   document.getElementById('streak-count').textContent = streak;
   document.getElementById('stat-workouts').textContent = done.length;
   document.getElementById('stat-streak').textContent = streak;
   document.getElementById('stat-week').textContent = getThisWeekCount();
 
-  // Kegel
   if (userProfile.kegel === 'no') {
     const kc = document.getElementById('kegel-reminder-card');
     if (kc) kc.style.display = 'none';
   }
 
-  // Nutrition
   const tipIdx = new Date().getDate() % NUTRITION_TIPS.length;
   document.getElementById('nutrition-tip').innerHTML = NUTRITION_TIPS[tipIdx];
 }
@@ -441,10 +413,10 @@ function renderWorkoutPage() {
   document.getElementById('workout-day-title').textContent = day.name;
   document.getElementById('workout-day-desc').textContent = day.muscles;
 
-  // Day tabs
   const tabs = document.getElementById('day-tabs');
   tabs.innerHTML = '';
-  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach((n, i) => {
+  const dayShort = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  dayShort.forEach((n, i) => {
     const btn = document.createElement('button');
     btn.className = 'day-tab' + (i === currentDayIndex ? ' active' : '');
     btn.textContent = `${n}: ${weekPlan[i].name}`;
@@ -485,7 +457,6 @@ function renderWorkoutPage() {
     const repsLabel = typeof vars.reps === 'string' ? vars.reps :
       (vars.hold ? `${vars.reps} × ${vars.hold}` : vars.reps);
 
-    // Set logs for this exercise today
     const setLogKey = `${getTodayKey()}-${exKey}`;
     const setLogs = JSON.parse(localStorage.getItem(setLogKey) || '[]');
     const setLogHtml = setLogs.length
@@ -495,7 +466,10 @@ function renderWorkoutPage() {
     const card = document.createElement('div');
     card.className = 'ex-card' + (isDone ? ' done' : '');
     card.innerHTML = `
-      <div class="ex-image">${renderMuscleSvg(ex.muscles)}</div>
+      <div class="ex-image" onclick="openExModal('${exKey}')">
+        ${renderMuscleSvg(ex.muscles)}
+        <div class="ex-gif-hint" title="Tap for demo">▶</div>
+      </div>
       <div class="ex-info" onclick="openExModal('${exKey}')">
         <div class="ex-name">${ex.name}</div>
         <div class="ex-sets">${vars.sets} sets × ${repsLabel}</div>
@@ -507,13 +481,12 @@ function renderWorkoutPage() {
       <div class="ex-actions">
         <button class="ex-check-btn${isDone?' checked':''}" onclick="toggleExDone('${exKey}',event)" title="Mark done">${isDone?'✓':'○'}</button>
         <button class="ex-log-btn" onclick="openSetLog('${exKey}','${ex.name}',event)" title="Log reps">+</button>
-        <a href="${ex.youtube}" target="_blank" class="ex-yt-btn" onclick="event.stopPropagation()">▶</a>
+        <button class="ex-yt-btn" onclick="openExModal('${exKey}');event.stopPropagation();" title="Watch how-to">📹</button>
       </div>`;
     list.appendChild(card);
   });
 }
 
-// FIX: SVG muscle silhouettes instead of emoji — grouped by primary muscle
 function renderMuscleSvg(muscles) {
   const primary = (muscles[0] || '').toLowerCase();
   let color = '#E8FF4A';
@@ -538,7 +511,6 @@ function renderMuscleSvg(muscles) {
   } else if (primary.includes('calf')) {
     icon = `<svg viewBox="0 0 48 48" class="ex-muscle-svg"><ellipse cx="16" cy="28" rx="8" ry="14" fill="${color}" opacity=".85"/><ellipse cx="32" cy="28" rx="8" ry="14" fill="${color}" opacity=".85"/></svg>`;
   } else {
-    // Full body / cardio
     icon = `<svg viewBox="0 0 48 48" class="ex-muscle-svg"><circle cx="24" cy="10" r="7" fill="${color}" opacity=".85"/><rect x="16" y="18" width="16" height="18" rx="5" fill="${color}" opacity=".85"/><rect x="8" y="20" width="8" height="14" rx="4" fill="${color}" opacity=".6"/><rect x="32" y="20" width="8" height="14" rx="4" fill="${color}" opacity=".6"/><rect x="14" y="36" width="8" height="10" rx="4" fill="${color}" opacity=".7"/><rect x="26" y="36" width="8" height="10" rx="4" fill="${color}" opacity=".7"/></svg>`;
   }
   return icon;
@@ -554,18 +526,16 @@ function toggleExDone(key, e) {
   renderWorkoutPage();
 }
 
-// FIX: completeWorkout always uses today's actual date, not the selected tab
 function completeWorkout() {
   const day = weekPlan[currentDayIndex];
   if (day.type === 'rest') { showToast('This is a rest day 💤'); return; }
   haptic([20, 10, 20]);
 
-  const dateKey = getTodayKey(); // always today, not selected tab
+  const dateKey = getTodayKey();
   if (!userProfile.workoutsDone.includes(dateKey)) {
     userProfile.workoutsDone.push(dateKey);
   }
 
-  // Log to workout history
   if (!userProfile.workoutLog) userProfile.workoutLog = {};
   userProfile.workoutLog[dateKey] = {
     dayName: day.name,
@@ -577,7 +547,6 @@ function completeWorkout() {
     })
   };
 
-  // Mark all exercises done on current day tab
   const doneKey = `${getDateKey(currentDayIndex)}-done`;
   const allDone = {};
   day.exercises.forEach(k => allDone[k] = true);
@@ -590,21 +559,43 @@ function completeWorkout() {
   renderWorkoutPage();
 }
 
+// ── EXERCISE MODAL — with GIF demo ──
 function openExModal(key) {
   const ex = EXERCISES[key];
   if (!ex) return;
   const level = userProfile.level || 'beginner';
   const vars = getOverloadedVars(key, level) || ex.variations.beginner;
 
+  // Build GIF section
+  const gifSection = ex.gif ? `
+    <div class="ex-modal-gif-wrap">
+      <div class="ex-modal-gif-label">HOW TO DO IT</div>
+      <div class="ex-modal-gif-container">
+        <img src="${ex.gif}" 
+             alt="${ex.name} demonstration"
+             class="ex-modal-gif"
+             onerror="this.parentElement.innerHTML='<div class=\\'gif-fallback\\'>🏋️<br><small>Animation unavailable</small></div>'"
+             loading="lazy">
+      </div>
+    </div>` : '';
+
+  // YouTube link section
+  const ytSection = ex.youtube ? `
+    <a href="${ex.youtube}" target="_blank" rel="noopener noreferrer" class="ex-modal-yt" onclick="event.stopPropagation()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#ff0000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-2.75 12.31 12.31 0 01-8.26 2.19A12.31 12.31 0 014.41 3.94a4.83 4.83 0 01-3.77 2.75A12.28 12.28 0 002 12a12 12 0 0020 0 12.28 12.28 0 00-2.41-5.31zM12 16a4 4 0 110-8 4 4 0 010 8z"/></svg>
+      <span>Watch Full Tutorial on YouTube →</span>
+    </a>` : '';
+
   document.getElementById('ex-modal-content').innerHTML = `
     <div class="ex-modal-header">
       <div class="ex-modal-name">${ex.name}</div>
       <div class="ex-modal-meta">${vars.sets} sets × ${vars.reps}${vars.hold ? ' · Hold ' + vars.hold : ''}</div>
     </div>
+    ${gifSection}
     <div class="ex-modal-section"><h4>Description</h4><p>${ex.description}</p></div>
-    <div class="ex-modal-section"><h4>Best Practice Tips</h4><ul>${ex.tips.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+    <div class="ex-modal-section"><h4>Form Tips</h4><ul>${ex.tips.map(t=>`<li>${t}</li>`).join('')}</ul></div>
     <div class="ex-modal-section"><h4>Target Muscles</h4><p>${ex.muscles.join(' · ')}</p></div>
-    <a href="${ex.youtube}" target="_blank" class="ex-modal-yt"><span style="font-size:1.3rem">▶</span><span>Watch Tutorial on YouTube</span></a>`;
+    ${ytSection}`;
 
   document.getElementById('ex-modal').classList.remove('hidden');
 }
@@ -612,14 +603,12 @@ function openExModal(key) {
 function closeExModal() { document.getElementById('ex-modal').classList.add('hidden'); }
 
 // ── SET LOGGING ──
-// FIX: let users log actual reps per set
 function openSetLog(exKey, exName, e) {
   e.stopPropagation();
   pendingSetLog = { exKey };
   const setLogKey = `${getTodayKey()}-${exKey}`;
   const existing = JSON.parse(localStorage.getItem(setLogKey) || '[]');
   const setNum = existing.length + 1;
-  const ex = EXERCISES[exKey];
   const vars = getOverloadedVars(exKey, userProfile.level || 'beginner');
 
   document.getElementById('setlog-title').textContent = `${exName} — Set ${setNum}`;
@@ -645,16 +634,11 @@ function saveSetLog() {
   closeSetLog();
   haptic(12);
   renderWorkoutPage();
-
-  // FIX: start rest timer after logging a set
-  const ex = EXERCISES[exKey];
-  const vars = getOverloadedVars(exKey, userProfile.level || 'beginner');
-  startRestTimer(60); // 60s default rest
+  startRestTimer(60);
   showToast(`Set logged: ${reps} reps ✓`, 'success');
 }
 
 // ── REST TIMER ──
-// FIX: Built-in rest timer between sets
 function startRestTimer(seconds) {
   stopRestTimer();
   restDuration = seconds;
@@ -690,7 +674,7 @@ function stopRestTimer() {
 
 function skipRestTimer() { haptic(8); stopRestTimer(); }
 
-// ── KEGEL ──
+// ── KEGEL PAGE — with how-to images ──
 function renderKegelPage() { setKegelLevel(kegelLevel); }
 
 function setKegelLevel(level) {
@@ -702,13 +686,43 @@ function setKegelLevel(level) {
   const prog = KEGEL_PROGRAMS[level];
   const c = document.getElementById('kegel-exercises');
   c.innerHTML = `<div class="section"><h3 class="section-title">${prog.title} · ${prog.week}</h3></div>`;
+  
   prog.exercises.forEach(ex => {
     const d = document.createElement('div');
     d.className = 'kegel-ex-item';
-    d.innerHTML = `<h4>${ex.name}</h4>
-      <div class="kegel-timing"><span>⏱ Hold: ${ex.contract}s</span><span>😮‍💨 Rest: ${ex.rest}s</span><span>🔁 ${ex.reps} reps</span></div>
-      <p>${ex.instruction}</p>
-      <p style="font-size:.75rem;color:var(--text3);margin-top:.4rem">💡 ${ex.purpose}</p>`;
+    d.innerHTML = `
+      <div class="kegel-ex-header">
+        <h4>${ex.name}</h4>
+        <div class="kegel-timing">
+          <span>⏱ Hold: ${ex.contract}s</span>
+          <span>😮 Rest: ${ex.rest}s</span>
+          <span>🔁 ${ex.reps} reps</span>
+        </div>
+      </div>
+      <div class="kegel-how-to">
+        <div class="kegel-how-label">HOW TO DO IT</div>
+        <div class="kegel-anatomy-visual">
+          <div class="anatomy-diagram">
+            <svg viewBox="0 0 120 80" width="120" height="80">
+              <!-- Body outline -->
+              <ellipse cx="60" cy="20" rx="14" ry="16" fill="none" stroke="rgba(232,255,74,0.3)" stroke-width="1.5"/>
+              <!-- Pelvis shape -->
+              <path d="M35 45 Q60 35 85 45 Q88 60 80 68 Q60 72 40 68 Q32 60 35 45Z" fill="rgba(232,255,74,0.08)" stroke="rgba(232,255,74,0.4)" stroke-width="1.5"/>
+              <!-- Pelvic floor muscles - highlighted -->
+              <ellipse cx="60" cy="62" rx="16" ry="6" fill="rgba(232,255,74,0.35)" class="pf-muscle"/>
+              <text x="60" y="66" text-anchor="middle" font-size="5" fill="#E8FF4A" font-family="sans-serif">PELVIC FLOOR</text>
+              <!-- Spine indicator -->
+              <line x1="60" y1="36" x2="60" y2="44" stroke="rgba(232,255,74,0.2)" stroke-width="2"/>
+              <!-- Labels -->
+              <text x="60" y="14" text-anchor="middle" font-size="6" fill="rgba(232,255,74,0.5)" font-family="sans-serif">CORE</text>
+            </svg>
+          </div>
+          <div class="kegel-how-text">
+            <p>${ex.howTo || ex.instruction}</p>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.75rem;color:var(--text3);margin-top:.5rem">💡 ${ex.purpose}</p>`;
     c.appendChild(d);
   });
 }
@@ -731,7 +745,6 @@ function startKegelSession() {
 
 function updateKegelDisplay() {
   const s = kegelSessionState;
-  // FIX: guard against undefined exercises
   if (!s.exercises || s.exIdx >= s.exercises.length) return;
   const ex = s.exercises[s.exIdx];
 
@@ -755,7 +768,6 @@ function startKegelTimer() {
     if (kegelSessionState.paused) return;
     const s = kegelSessionState;
 
-    // FIX: always check bounds before accessing exercises
     if (!s.exercises || s.exIdx >= s.exercises.length) {
       clearInterval(kegelTimerInterval);
       return;
@@ -773,17 +785,14 @@ function startKegelTimer() {
         s.phase = 'contract';
         s.round++;
         if (s.round > s.totalRounds) {
-          // Move to next exercise
           s.exIdx++;
           if (s.exIdx >= s.exercises.length) {
-            // Session complete!
             clearInterval(kegelTimerInterval);
             kegelTimerInterval = null;
             closeKegelSession();
             kegelComplete();
             return;
           }
-          // FIX: safely transition to next exercise
           const nextEx = s.exercises[s.exIdx];
           s.round = 1;
           s.totalRounds = nextEx.reps;
@@ -828,7 +837,6 @@ function renderProgressPage() {
   document.getElementById('prog-week').textContent = getThisWeekCount();
   document.getElementById('prog-kegel-total').textContent = kDone.length;
 
-  // Calendar — 28 days
   const cal = document.getElementById('cal-grid');
   cal.innerHTML = '';
   ['M','T','W','T','F','S','S'].forEach(d => {
@@ -856,7 +864,6 @@ function renderProgressPage() {
     cal.appendChild(div);
   }
 
-  // Muscle bars
   const muscleCounts = { Chest:0, Back:0, Legs:0, Core:0, Shoulders:0, Arms:0 };
   weekPlan.forEach((day, i) => {
     if (done.includes(getDateKey(i))) {
@@ -886,10 +893,9 @@ function renderProgressPage() {
     </div>`;
   });
 
-  // FIX: Weight chart using canvas instead of just a list
-  const wLog = userProfile.weightLog || [];
-  renderWeightChart(wLog);
+  renderWeightChart(userProfile.weightLog || []);
 
+  const wLog = userProfile.weightLog || [];
   const wHistory = document.getElementById('weight-history');
   if (!wLog.length) {
     wHistory.innerHTML = '<p style="font-size:.85rem;color:var(--text3)">No entries yet — log your first weight above.</p>';
@@ -899,7 +905,6 @@ function renderProgressPage() {
     ).join('');
   }
 
-  // FIX: Workout history log
   renderWorkoutHistory();
 }
 
@@ -932,7 +937,6 @@ function renderWeightChart(wLog) {
   const xScale = i => pad.l + (i / (vals.length - 1)) * chartW;
   const yScale = v => pad.t + chartH - ((v - minV) / (maxV - minV)) * chartH;
 
-  // Grid lines
   ctx.strokeStyle = 'rgba(255,255,255,0.05)';
   ctx.lineWidth = 1;
   for (let j = 0; j <= 4; j++) {
@@ -940,7 +944,6 @@ function renderWeightChart(wLog) {
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + chartW, y); ctx.stroke();
   }
 
-  // Y labels
   ctx.fillStyle = '#5a5a55';
   ctx.font = '10px DM Sans, sans-serif';
   ctx.textAlign = 'right';
@@ -949,7 +952,6 @@ function renderWeightChart(wLog) {
     ctx.fillText(v.toFixed(1), pad.l - 4, pad.t + (j / 4) * chartH + 4);
   }
 
-  // Line
   ctx.beginPath();
   ctx.strokeStyle = '#E8FF4A';
   ctx.lineWidth = 2.5;
@@ -959,7 +961,6 @@ function renderWeightChart(wLog) {
   });
   ctx.stroke();
 
-  // Dots
   vals.forEach((v, i) => {
     ctx.beginPath();
     ctx.arc(xScale(i), yScale(v), 4, 0, Math.PI * 2);
@@ -1063,7 +1064,6 @@ function shareWorkout() {
   } else copyWorkout();
 }
 
-// FIX: iOS Safari-safe PDF — use Blob + anchor instead of window.open
 function downloadPDF() {
   const text = generateWorkoutText();
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Alpha Workout Plan</title>
@@ -1084,7 +1084,6 @@ pre{white-space:pre-wrap;font-size:13px;line-height:1.7}h1{margin-bottom:.5rem}
     document.body.removeChild(a); URL.revokeObjectURL(url);
     showToast('Plan downloaded ✓', 'success');
   } catch(e) {
-    // Fallback for environments that block blob URLs
     const w = window.open('', '_blank');
     if (w) { w.document.write(html); w.document.close(); }
     else showToast('Please allow popups or use Copy instead');
@@ -1105,11 +1104,6 @@ function showToast(msg, type = '') {
   t._timer = setTimeout(() => t.classList.add('hidden'), 2800);
 }
 
-function handleModalBackdrop(e, modalId, closeFn) {
-  if (e.target.id === modalId) closeFn();
-}
-
-// Close modals on backdrop click
 document.addEventListener('click', e => {
   if (e.target.id === 'ex-modal') closeExModal();
   if (e.target.id === 'kegel-modal') closeKegelSession();
