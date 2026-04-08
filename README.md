@@ -1,110 +1,110 @@
-# 🏋️ Alpha Home Workout Coach — PWA
-
-A complete, mobile-first Progressive Web App for home muscle building, weight gain, and men's pelvic health training.
-
+💪 Alpha Home Workout Coach
+> **A fully offline-capable PWA for bodyweight muscle building, men's pelvic health, and sexual performance training.**
+No gym. No equipment. No excuses.
 ---
-
-## 📁 Project Structure
-
+🚀 Live Demo
+Deploy in 30 seconds → Netlify | Vercel | GitHub Pages
+---
+✨ Features
+Feature	Details
+🎯 Smart Onboarding	9-step profile builder → personalized plan
+📅 5–6 Day Programs	Beginner / Intermediate / Advanced
+🏋️ 30+ Exercises	100% bodyweight, zero equipment required
+▶️ In-App Video Tutorials	YouTube embeds — videos play inside the app, never a new tab
+🛡️ Kegel / Pelvic Floor	Science-backed pelvic floor training with embedded video guides
+⏱️ Rest Timer	Auto-starts after every logged set
+📈 Progressive Overload	Sets & reps auto-increase week by week
+📊 Progress Tracking	Calendar, muscle heat map, weight chart
+💾 Offline Support	Full PWA with Service Worker caching
+📲 Installable	Add to home screen on iOS & Android
+📤 Export	Copy, Email, PDF, Share
+---
+📁 Project Structure
 ```
 alpha-coach/
-├── index.html          # Main app (all screens)
+├── index.html          # Main app — all screens
 ├── manifest.json       # PWA manifest
-├── sw.js               # Service worker (offline support)
+├── sw.js               # Service worker (offline + YouTube bypass)
 ├── css/
 │   └── style.css       # Complete stylesheet
 ├── js/
-│   ├── data.js         # Exercise database + workout plans
-│   └── app.js          # App logic, state, interactions
-└── icons/              # App icons (add your own)
-    ├── icon-192.png
+│   ├── data.js         # Exercise DB, workout plans, Kegel programs, nutrition tips
+│   └── app.js          # App logic, state, video players, timers
+└── icons/
+    ├── icon-192.png    # Add your own (see below)
     └── icon-512.png
 ```
-
 ---
-
-## 🚀 Quick Deploy (No coding needed)
-
-### Option 1: Netlify (Easiest — Free)
-
-1. Go to https://netlify.com → Sign up free
-2. Drag your entire `alpha-coach` folder onto the Netlify dashboard
-3. Your app is live in 30 seconds with a URL like `https://alpha-coach-xyz.netlify.app`
-4. To use a custom domain: Site settings → Domain management
-
-### Option 2: GitHub Pages (Free)
-
-1. Go to https://github.com → Create account → New repository
-2. Name it `alpha-coach` (make it public)
-3. Upload all files
-4. Go to Settings → Pages → Source: main branch → `/` root
-5. Your URL: `https://yourusername.github.io/alpha-coach`
-
-### Option 3: Vercel (Free, fastest)
-
-1. Go to https://vercel.com → Sign up
-2. Click "Add New Project" → drag your folder
-3. Done — instant URL with HTTPS
-
+🏃 Quick Deploy
+Netlify (easiest — free)
+Go to netlify.com → sign up
+Drag the `alpha-coach/` folder onto the dashboard
+Live in 30 seconds ✅
+GitHub Pages (free)
+Push this repo to GitHub
+Settings → Pages → Source: `main` branch → `/` root
+URL: `https://yourusername.github.io/alpha-coach`
+Vercel (free, fastest)
+```bash
+npx vercel
+```
 ---
-
-## 📱 Adding Icons
-
-Create PNG icons in these sizes and place in `/icons/`:
-- `icon-192.png` (192×192 px)
-- `icon-512.png` (512×512 px)
-
-Free icon creation: https://realfavicongenerator.net
-
+📱 Install as a Mobile App
+iPhone / iPad:
+Open Safari → go to your deployed URL
+Tap Share → "Add to Home Screen"
+Android:
+Open Chrome → go to your deployed URL
+Tap ⋮ menu → "Install app"
 ---
-
-## 📲 Installing the App on Your Phone
-
-After deploying:
-
-**iPhone/iPad:**
-1. Open Safari → go to your URL
-2. Tap the Share button (box with arrow)
-3. Scroll down → "Add to Home Screen"
-4. Tap Add → the app appears on your home screen
-
-**Android:**
-1. Open Chrome → go to your URL
-2. Tap the menu (3 dots) → "Install app" or "Add to Home screen"
-
+🏋️ Workout Programs
+Beginner (5 days active)
+Day	Focus
+Mon	Push Day A — Chest · Shoulders · Triceps
+Tue	Legs + Core — Quads · Glutes · Abs
+Wed	Pull Day — Back · Biceps · Rear Delts
+Thu	Rest
+Fri	Push Day B — Chest · Shoulders · Core
+Sat	Full Body — Cardio · All Muscle Groups
+Sun	Rest
+Intermediate / Advanced
+6 active days with Push A, Pull, Legs, Core, Push B, Full Body HIIT.
 ---
-
-## 🧠 Features
-
-- ✅ Smart 8-step onboarding
-- ✅ Personalized 7-day workout plans (Beginner/Intermediate/Advanced)
-- ✅ 20+ exercises with descriptions, tips & YouTube links
-- ✅ Kegel / pelvic floor training with guided timer
-- ✅ Science-backed sexual performance info
-- ✅ Progress tracking (streak, calendar, muscle groups)
-- ✅ Weight log
-- ✅ Nutrition tips (daily rotation)
-- ✅ Export via PDF, email, copy, share
-- ✅ Offline support (Service Worker)
-- ✅ Installable as a home screen app
-
+🛡️ Kegel / Pelvic Floor Training
+Each level includes 3 exercises with:
+Embedded tutorial video (plays in-app)
+Animated pelvic floor anatomy diagram
+Guided timer with squeeze / release phases
+Science-backed protocols
+Results (peer-reviewed studies):
+40% of men regained normal erectile function (BJU International)
+88% improved ejaculatory control (Lavoisier et al.)
+Stronger erections, longer sexual endurance
 ---
-
-## 🔬 Science References
-
-- Mayo Clinic: Kegel exercises for men (2024)
-- BJU International: 40% of men regained erectile function with pelvic floor training
-- Pastore et al. (2014): Pelvic floor exercises extend ejaculatory latency
-- 88% improvement in premature ejaculation after pelvic floor training (Lavoisier et al., 2014)
-- Strength training increases testosterone (Journal of Strength & Conditioning Research)
-- Aerobic exercise reduces erectile dysfunction risk by 30% (American Journal of Cardiology)
-
+🎥 Video System
+All tutorial videos embed directly using YouTube's iframe API with:
+`playsinline=1` — stays in app on iOS
+`rel=0` — no related videos after playback
+`modestbranding=1` — minimal YouTube UI
+Auto-pause on modal close
 ---
-
-## 🔧 Customization
-
-To add exercises: Edit `js/data.js` and add entries to the `EXERCISES` object.
-
-To change plans: Edit `WEEKLY_TEMPLATES` in `js/data.js`.
-
-To add nutrition tips: Edit the `NUTRITION_TIPS` array in `js/data.js`.
+🔬 Science References
+Mayo Clinic: Kegel exercises for men (2024)
+BJU International: Pelvic floor training & erectile function
+Pastore et al. (2014): Ejaculatory latency improvement
+Lavoisier et al. (2014): 88% PE improvement
+Journal of Strength & Conditioning: Squats & testosterone
+American Journal of Cardiology: Exercise & erectile dysfunction
+---
+🔧 Customization
+Add an exercise → edit `EXERCISES` object in `js/data.js`
+Change a workout plan → edit `WEEKLY_TEMPLATES` in `js/data.js`
+Add nutrition tips → edit `NUTRITION_TIPS` array in `js/data.js`
+Change Kegel protocols → edit `KEGEL_PROGRAMS` in `js/data.js`
+---
+🖼️ Icons
+Create 192×192 and 512×512 PNG icons, place in `/icons/`.
+Free tool: realfavicongenerator.net
+---
+📄 License
+MIT — free to use, modify, and deploy.
