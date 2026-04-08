@@ -1,7 +1,7 @@
 {
   "name": "Alpha Home Workout Coach",
   "short_name": "Alpha Coach",
-  "description": "Personalized home workout program with muscle gain, Kegel training, and men's health focus.",
+  "description": "Personalized bodyweight home workout — muscle gain, Kegel training, men's health.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -22,6 +22,5 @@
     }
   ],
   "categories": ["health", "fitness", "lifestyle"],
-  "screenshots": [],
   "lang": "en"
 }

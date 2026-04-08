@@ -1,0 +1,398 @@
+/* ALPHA HOME WORKOUT COACH — v3 stylesheet */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --accent:#E8FF4A;
+  --accent-dim:rgba(232,255,74,0.12);
+  --bg:#0a0a0a;
+  --bg2:#111;
+  --bg3:#1a1a1a;
+  --bg4:#222;
+  --text:#f5f5f0;
+  --text2:#9a9a90;
+  --text3:#5a5a55;
+  --border:rgba(255,255,255,0.08);
+  --green:#22c55e;
+  --red:#ef4444;
+  --blue:#3b82f6;
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-lg:24px;
+  --nav-h:72px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Syne',sans-serif}
+.hidden{display:none!important}
+
+/* ── PAGE TRANSITIONS ── */
+.page{min-height:100dvh;padding-bottom:calc(var(--nav-h) + var(--safe-b) + 1rem);opacity:0;transform:translateX(20px);transition:opacity 0.22s ease,transform 0.22s ease;pointer-events:none}
+.page.active{opacity:1;transform:none;pointer-events:all}
+.page.hidden{display:none!important}
+
+/* ── SPLASH ── */
+.splash{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s,transform .6s}
+.splash.fade-out{opacity:0;transform:scale(1.04);pointer-events:none}
+.splash-inner{text-align:center;padding:2rem}
+.splash-logo{margin-bottom:1.5rem;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.splash-title{font-size:3.5rem;font-weight:800;line-height:1;margin-bottom:.5rem}
+.splash-sub{color:var(--text2);font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2rem}
+.splash-loader{width:180px;height:3px;background:var(--bg3);border-radius:99px;margin:0 auto;overflow:hidden}
+.loader-bar{height:100%;width:0;background:var(--accent);border-radius:99px;animation:load 2.5s ease-in-out forwards}
+@keyframes load{0%{width:0}60%{width:70%}100%{width:100%}}
+
+/* ── ONBOARDING ── */
+.screen{min-height:100dvh;display:flex;flex-direction:column}
+.onboard-progress{padding:1rem 1.5rem .5rem;padding-top:calc(1rem + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:1rem}
+.progress-track{flex:1;height:3px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.step-label{font-size:.75rem;color:var(--text2);white-space:nowrap}
+
+.step{flex:1;display:flex;flex-direction:column;padding:2rem 1.5rem;padding-bottom:calc(2rem + var(--safe-b));animation:stepIn .3s ease}
+@keyframes stepIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.step-hero{flex:1;display:flex;flex-direction:column;justify-content:center}
+.hero-emoji{font-size:4rem;margin-bottom:1rem}
+.step h2{font-size:2.2rem;font-weight:800;line-height:1.15;margin-bottom:1rem}
+.accent{color:var(--accent)}
+.step-desc{color:var(--text2);font-size:.95rem;line-height:1.6;margin-bottom:1.5rem}
+
+/* form */
+.form-grid{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem}
+.form-group label{font-size:.8rem;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.form-group input{width:100%;padding:.9rem 1rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.1rem;transition:border-color .2s}
+.form-group input:focus{outline:none;border-color:var(--accent)}
+.form-group input.error{border-color:var(--red)}
+.form-group input::placeholder{color:var(--text3)}
+.field-error{font-size:.75rem;color:var(--red);min-height:1rem;display:block}
+
+/* option cards */
+.option-cards{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem;flex:1}
+.option-card{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .18s}
+.option-card:hover{border-color:rgba(232,255,74,.4);background:var(--bg4)}
+.option-card.selected{border-color:var(--accent);background:var(--accent-dim)}
+.option-icon{font-size:1.8rem;flex-shrink:0}
+.option-text{display:flex;flex-direction:column}
+.option-text strong{font-size:1rem;color:var(--text)}
+.option-text span{font-size:.8rem;color:var(--text2);margin-top:.15rem}
+
+/* checkboxes */
+.checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem;flex:1}
+.check-card{display:flex;align-items:center;gap:.6rem;padding:.9rem 1rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .18s;font-size:.9rem}
+.check-card input[type="checkbox"]{accent-color:var(--accent);width:16px;height:16px;flex-shrink:0}
+.check-card:has(input:checked){border-color:var(--accent);background:var(--accent-dim)}
+
+.step-nav{display:flex;gap:.75rem;margin-top:auto;padding-top:1rem}
+.step-nav .btn-ghost{flex:0 0 auto}
+.step-nav .btn-primary{flex:1}
+
+/* buttons */
+.btn-primary{width:100%;padding:1rem;background:var(--accent);color:#0a0a0a;border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .18s;letter-spacing:.02em}
+.btn-primary:hover{background:#d4eb20;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0) scale(.99)}
+.btn-ghost{padding:1rem 1.4rem;background:transparent;color:var(--text2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.95rem;cursor:pointer;transition:all .18s}
+.btn-ghost:hover{border-color:var(--text2);color:var(--text)}
+.btn-sm{padding:.6rem 1rem;background:var(--accent);color:#0a0a0a;border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap}
+.disclaimer{text-align:center;font-size:.75rem;color:var(--text3);margin-top:1rem}
+
+/* kegel intro */
+.kegel-intro{flex:1}
+.kegel-badge{display:inline-block;padding:.3rem .8rem;background:var(--bg3);border:1px solid var(--border);border-radius:99px;font-size:.75rem;color:var(--text2);margin-bottom:1rem}
+.info-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:1.2rem}
+.info-card p{font-size:.9rem;color:var(--text);line-height:1.6;margin-bottom:.75rem}
+.info-card ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.info-card li{font-size:.85rem;color:var(--text2)}
+.info-card li strong{color:var(--accent)}
+.sub-note{font-size:.8rem!important;color:var(--text3)!important;font-style:italic}
+
+/* generating */
+.generating-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.5rem;padding:2rem}
+.gen-spinner{width:80px;height:80px}
+.spin-svg{animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gen-messages{display:flex;flex-direction:column;gap:.5rem}
+.gen-msg{font-size:.9rem;color:var(--text3);transition:color .4s}
+.gen-msg.active{color:var(--accent);font-weight:500}
+
+/* ── NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));background:rgba(10,10,10,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:.5rem;z-index:100;padding-bottom:var(--safe-b)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.5rem .25rem;background:none;border:none;color:var(--text3);cursor:pointer;transition:color .2s;font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.04em}
+.nav-btn svg{width:22px;height:22px;transition:transform .2s}
+.nav-btn.active{color:var(--accent)}
+.nav-btn.active svg{transform:scale(1.1)}
+
+/* page scroll area */
+.page-scroll{padding-top:calc(env(safe-area-inset-top,0px) + 1rem);padding-left:1.25rem;padding-right:1.25rem}
+
+/* ── DASHBOARD ── */
+.dash-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;padding-top:.5rem}
+.greeting{font-size:.85rem;color:var(--text2);margin-bottom:.2rem}
+.dash-title{font-size:1.8rem;font-weight:800}
+.streak-badge{text-align:center;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.6rem .9rem}
+.streak-badge span{display:block;font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--accent)}
+.streak-badge small{font-size:.65rem;color:var(--text2)}
+
+/* metrics strip */
+.metrics-strip{display:flex;gap:.5rem;margin-bottom:1.25rem;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.metrics-strip::-webkit-scrollbar{display:none}
+.metric-pill{flex-shrink:0;background:var(--bg3);border:1px solid var(--border);border-radius:99px;padding:.5rem 1rem;display:flex;flex-direction:column;align-items:center}
+.metric-label{font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.metric-val{font-size:.95rem;font-weight:700;color:var(--accent);font-family:'Syne',sans-serif}
+
+.today-card{background:var(--accent);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1.5rem;cursor:pointer;transition:transform .18s}
+.today-card:hover{transform:scale(1.01)}
+.today-card-inner{padding:1.5rem;color:#0a0a0a}
+.today-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:.4rem}
+.today-card-inner h3{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:.2rem}
+.today-card-inner p{font-size:.85rem;opacity:.7;margin-bottom:1rem}
+.today-meta{display:flex;gap:1rem;margin-bottom:1.2rem}
+.today-meta span{font-size:.8rem;font-weight:500;opacity:.75}
+.btn-start{display:inline-block;padding:.7rem 1.4rem;background:#0a0a0a;color:var(--accent);border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer}
+
+.overload-banner{display:flex;align-items:flex-start;gap:.75rem;background:rgba(232,255,74,.08);border:1px solid rgba(232,255,74,.25);border-radius:var(--radius-sm);padding:1rem;margin-bottom:1.25rem;font-size:.9rem}
+.overload-banner strong{display:block;margin-bottom:.2rem}
+.overload-banner p{font-size:.8rem;color:var(--text2)}
+
+.section{margin-bottom:1.5rem}
+.section-title{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
+
+.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem}
+.week-day{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.6rem .25rem;background:var(--bg3);border:1px solid var(--border);border-radius:10px;font-size:.65rem;color:var(--text3);cursor:pointer;transition:all .18s}
+.week-day.today{border-color:var(--accent);color:var(--text)}
+.week-day.rest{background:var(--bg2)}
+.day-dot{width:6px;height:6px;border-radius:50%;background:var(--bg4)}
+.week-day.today .day-dot{background:var(--accent)}
+.week-day.done .day-dot{background:var(--green)}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem .75rem;text-align:center}
+.stat-number{display:block;font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)}
+.stat-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+
+.kegel-card{display:flex;align-items:center;gap:1rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;cursor:pointer;margin-bottom:1.5rem;transition:border-color .18s}
+.kegel-card:hover{border-color:var(--accent)}
+.kegel-card-icon{font-size:2rem}
+.kegel-card strong{display:block;font-size:.95rem;margin-bottom:.2rem}
+.kegel-card p{font-size:.8rem;color:var(--text2);margin:0}
+.kegel-card svg{flex-shrink:0;color:var(--text3);margin-left:auto}
+.tip-card{background:var(--bg3);border-left:3px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.2rem;font-size:.9rem;line-height:1.6;color:var(--text2)}
+
+/* ── WORKOUT PAGE ── */
+.workout-header{display:flex;align-items:center;gap:1rem;padding:calc(env(safe-area-inset-top,0px) + .5rem) 0 1rem;margin-bottom:.75rem}
+.back-btn{width:40px;height:40px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:1.1rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .18s}
+.back-btn:hover{background:var(--bg4)}
+.workout-header h2{font-size:1.4rem;font-weight:800;flex:1}
+.workout-subtitle{font-size:.8rem;color:var(--text2)}
+.complete-btn{padding:.5rem .9rem;background:var(--accent);color:#0a0a0a;border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:background .18s}
+.complete-btn:hover{background:#d4eb20}
+
+.day-tabs{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.75rem;margin-bottom:1rem;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;padding:.5rem .9rem;background:var(--bg3);border:1px solid var(--border);border-radius:99px;font-size:.75rem;color:var(--text2);cursor:pointer;transition:all .18s;white-space:nowrap}
+.day-tab.active{background:var(--accent);border-color:var(--accent);color:#0a0a0a;font-weight:600}
+
+.exercise-list{display:flex;flex-direction:column;gap:1rem}
+.ex-card{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .18s;display:flex;align-items:stretch}
+.ex-card:hover{border-color:rgba(232,255,74,.3);transform:translateY(-2px)}
+.ex-card.done{opacity:.55}
+
+/* ── EXERCISE ANIMATION WRAPPER ── */
+.ex-anim-wrap{width:88px;flex-shrink:0;background:var(--bg4);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:4px}
+.ex-anim-wrap svg{width:80px;height:auto;max-height:72px}
+.ex-muscle-svg{width:60px;height:60px;opacity:.8}
+
+.ex-info{flex:1;padding:1rem}
+.ex-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.ex-sets{font-size:.8rem;color:var(--accent);font-weight:600;margin-bottom:.3rem}
+.ex-desc{font-size:.78rem;color:var(--text2);line-height:1.5}
+.ex-tags{display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap}
+.ex-tag{font-size:.65rem;padding:.2rem .5rem;background:var(--bg4);border-radius:99px;color:var(--text3)}
+.ex-done-check{display:inline-flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(--green);margin-top:.4rem}
+
+.ex-actions{display:flex;flex-direction:column;justify-content:center;gap:.5rem;padding:.75rem}
+.ex-check-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:var(--text3);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.ex-check-btn.checked{background:var(--green);border-color:var(--green);color:#fff}
+.ex-log-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:var(--text2);font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;font-weight:600}
+.ex-log-btn:hover{background:var(--bg3);border-color:var(--accent);color:var(--accent)}
+.ex-yt-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:#ff0000;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .18s}
+.ex-yt-btn:hover{background:rgba(255,0,0,.1);border-color:rgba(255,0,0,.4)}
+
+/* Set log history */
+.set-log-history{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem}
+.set-log-pill{font-size:.7rem;padding:.2rem .55rem;background:rgba(232,255,74,.12);border:1px solid rgba(232,255,74,.25);border-radius:99px;color:var(--accent)}
+
+/* ── REST TIMER ── */
+.rest-timer-bar{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b));left:0;right:0;z-index:90;padding:.5rem 1.25rem;background:var(--bg2);border-top:1px solid rgba(232,255,74,.3);animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+.rest-inner{display:flex;align-items:center;gap:.75rem}
+.rest-label{font-size:.7rem;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+.rest-count{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent);flex-shrink:0;min-width:32px}
+.rest-track-wrap{flex:1}
+.rest-track{height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
+.rest-fill{height:100%;background:var(--accent);border-radius:99px;transition:width 1s linear}
+.rest-skip-btn{padding:.4rem .8rem;background:transparent;border:1px solid var(--border);border-radius:99px;color:var(--text2);font-size:.75rem;cursor:pointer;white-space:nowrap;transition:all .18s}
+.rest-skip-btn:hover{border-color:var(--text2);color:var(--text)}
+
+/* ── KEGEL ── */
+.kegel-header{display:flex;align-items:center;gap:1rem;padding:calc(env(safe-area-inset-top,0px) + .5rem) 0 1rem}
+.kegel-header h2{font-size:1.4rem;font-weight:800}
+
+/* Kegel How It Works section */
+.kegel-how-it-works{margin-bottom:1.25rem}
+.kegel-anatomy-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.75rem}
+.kegel-anatomy-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .5rem;text-align:center}
+.kegel-anatomy-card p{font-size:.72rem;color:var(--text2);margin-top:.4rem;line-height:1.4}
+.kegel-anatomy-card strong{color:var(--text);font-size:.78rem;display:block}
+.kegel-anim-small{width:52px;height:52px;margin:0 auto .35rem}
+.kegel-anim-small svg{width:100%;height:100%}
+
+.kegel-science-box{background:linear-gradient(135deg,rgba(232,255,74,.07),rgba(232,255,74,.02));border:1px solid rgba(232,255,74,.2);border-radius:var(--radius);padding:1.2rem;margin-bottom:1.2rem}
+.kegel-science-box h3{font-size:.9rem;margin-bottom:.6rem;color:var(--accent)}
+.kegel-science-box p{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:.5rem}
+.kegel-levels{display:flex;gap:.5rem;margin-bottom:1.2rem}
+.level-btn{flex:1;padding:.6rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text2);font-size:.8rem;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+.level-btn.active{background:var(--accent);border-color:var(--accent);color:#0a0a0a;font-weight:600}
+.info-details{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:.75rem;overflow:hidden}
+.info-details summary{padding:.9rem 1rem;cursor:pointer;font-size:.9rem;color:var(--text2);list-style:none;display:flex;justify-content:space-between}
+.info-details summary::after{content:'›';transition:transform .2s}
+.info-details[open] summary::after{transform:rotate(90deg)}
+.details-content{padding:0 1rem 1rem;font-size:.85rem;color:var(--text2);line-height:1.7}
+.details-content ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.35rem}
+.details-content p{margin-bottom:.5rem}
+.kegel-ex-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:.75rem}
+.kegel-ex-item h4{font-family:'Syne',sans-serif;font-size:1rem;margin-bottom:.3rem}
+.kegel-timing{display:flex;gap:1rem;margin:.5rem 0;font-size:.8rem;color:var(--accent);font-weight:600;flex-wrap:wrap}
+.kegel-ex-item p{font-size:.82rem;color:var(--text2);line-height:1.5}
+.kegel-session-cta{margin:1.5rem 0}
+
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;z-index:500}
+.modal-sheet{background:var(--bg2);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:1.5rem;width:100%;max-height:90dvh;overflow-y:auto;border:1px solid var(--border);border-bottom:none;animation:sheetUp .28s ease}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+.modal-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:background .18s}
+.modal-close:hover{background:var(--bg4)}
+.ex-sheet{position:relative}
+.modal-top{text-align:center;margin-bottom:.5rem}
+.modal-top h3{font-family:'Syne',sans-serif;font-size:1.4rem;margin-bottom:.3rem}
+.modal-top p{font-size:.85rem;color:var(--text2)}
+.modal-actions{display:flex;gap:.75rem}
+.modal-actions .btn-ghost,.modal-actions .btn-primary{flex:1}
+
+/* exercise detail inside modal */
+.ex-modal-header{margin-bottom:1.2rem}
+.ex-modal-name{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:.3rem}
+.ex-modal-meta{font-size:.85rem;color:var(--accent);font-weight:600}
+.ex-modal-section{margin-bottom:1rem}
+.ex-modal-section h4{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+.ex-modal-section p,.ex-modal-section li{font-size:.9rem;color:var(--text2);line-height:1.6}
+.ex-modal-section ul{padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem}
+.ex-modal-yt{display:flex;align-items:center;gap:.75rem;background:rgba(255,0,0,.1);border:1px solid rgba(255,0,0,.3);border-radius:var(--radius-sm);padding:.9rem 1rem;text-decoration:none;color:var(--text);margin-top:1rem;font-size:.9rem;transition:background .18s}
+.ex-modal-yt:hover{background:rgba(255,0,0,.18)}
+
+/* kegel timer */
+.kegel-timer-ring{position:relative;width:160px;height:160px;margin:0.5rem auto 1rem}
+.kegel-timer-ring svg{width:100%;height:100%}
+.timer-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#timer-count{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--accent)}
+#timer-phase{font-size:.7rem;color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+.kegel-progress-row{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text2);margin-bottom:1.2rem}
+
+/* ── PROGRESS ── */
+.page-header-simple{padding:calc(env(safe-area-inset-top,0px) + .5rem) 0 1rem}
+.page-header-simple h2{font-size:1.8rem;font-weight:800}
+.progress-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem}
+.prog-stat{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem .5rem;text-align:center}
+.prog-number{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--accent)}
+.prog-label{font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:.2rem}
+
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;margin-bottom:.5rem}
+.cal-day{aspect-ratio:1;border-radius:6px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--text3)}
+.cal-day.done{background:rgba(34,197,94,.22);color:var(--green)}
+.cal-day.today{border:1.5px solid var(--accent)}
+.cal-day.kegel{background:rgba(232,255,74,.14);color:var(--accent)}
+.cal-legend{display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--text3);margin-top:.5rem;flex-wrap:wrap}
+.leg-dot{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle}
+
+.muscle-bars{display:flex;flex-direction:column;gap:.75rem}
+.muscle-bar-row{display:flex;align-items:center;gap:.75rem}
+.muscle-bar-label{font-size:.8rem;color:var(--text2);width:80px;flex-shrink:0}
+.muscle-bar-track{flex:1;height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.muscle-bar-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .6s ease}
+
+.weight-log-input{display:flex;gap:.75rem;margin-bottom:1rem}
+.weight-log-input input{flex:1;padding:.7rem 1rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .18s}
+.weight-log-input input:focus{outline:none;border-color:var(--accent)}
+.weight-chart{width:100%;display:block;border-radius:var(--radius-sm);margin-bottom:1rem;background:var(--bg3)}
+.weight-history{display:flex;flex-direction:column;gap:.5rem}
+.weight-entry{display:flex;justify-content:space-between;align-items:center;padding:.6rem .9rem;background:var(--bg3);border-radius:var(--radius-sm);font-size:.85rem}
+.weight-entry .w-val{color:var(--accent);font-weight:600}
+.weight-entry .w-date{color:var(--text3);font-size:.75rem}
+
+/* workout history */
+.workout-history-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1rem;margin-bottom:.6rem}
+.wh-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+.wh-name{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700}
+.wh-date{font-size:.75rem;color:var(--text3)}
+.wh-exercises{font-size:.78rem;color:var(--text2)}
+
+/* ── EXPORT ── */
+.export-options{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+.export-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1rem;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;gap:.5rem}
+.export-card:hover{border-color:var(--accent);background:var(--bg4)}
+.export-icon{font-size:2rem}
+.export-card strong{font-size:.9rem}
+.export-card p{font-size:.75rem;color:var(--text2);margin:0}
+.export-preview{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem}
+.export-preview h3{font-size:.85rem;color:var(--text2);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.preview-text{font-size:.75rem;color:var(--text3);white-space:pre-wrap;line-height:1.6;max-height:280px;overflow-y:auto;font-family:'DM Sans',monospace}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 1rem);left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:.7rem 1.4rem;border-radius:99px;font-size:.85rem;font-weight:500;z-index:999;white-space:nowrap;animation:toastIn .25s ease}
+.toast.success{background:var(--green);color:#fff}
+.toast.error-t{background:var(--red);color:#fff}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ── GIF DEMO IN EXERCISE MODAL ── */
+.ex-gif-hint{position:absolute;bottom:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(232,255,74,.9);color:#0a0a0a;font-size:.6rem;display:flex;align-items:center;justify-content:center;font-weight:700;pointer-events:none}
+
+.ex-modal-gif-wrap{margin-bottom:1.2rem}
+.ex-modal-gif-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem}
+.ex-modal-gif-container{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;min-height:160px;display:flex;align-items:center;justify-content:center}
+.ex-modal-gif{width:100%;max-height:260px;object-fit:contain;display:block;border-radius:var(--radius)}
+.gif-fallback{text-align:center;padding:2rem;color:var(--text3);font-size:2.5rem;line-height:1.4}
+.gif-fallback small{display:block;font-size:.75rem;margin-top:.4rem}
+
+/* ── KEGEL HOW-TO SECTION ── */
+.kegel-ex-header{margin-bottom:.75rem}
+.kegel-how-to{background:rgba(232,255,74,.04);border:1px solid rgba(232,255,74,.12);border-radius:var(--radius-sm);padding:.9rem;margin:.6rem 0}
+.kegel-how-label{font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem;font-weight:700}
+.kegel-anatomy-visual{display:flex;gap:.9rem;align-items:flex-start}
+.anatomy-diagram{flex-shrink:0}
+.anatomy-diagram svg .pf-muscle{animation:pulse-pf 2s ease-in-out infinite}
+@keyframes pulse-pf{0%,100%{opacity:.35}50%{opacity:.7}}
+.kegel-how-text{flex:1;font-size:.82rem;color:var(--text2);line-height:1.6}
+
+/* ── UPDATED EXERCISE MODAL YOUTUBE BTN ── */
+.ex-modal-yt{display:flex;align-items:center;gap:.75rem;background:rgba(255,0,0,.1);border:1px solid rgba(255,0,0,.3);border-radius:var(--radius-sm);padding:.9rem 1rem;text-decoration:none;color:var(--text);margin-top:1rem;font-size:.9rem;transition:background .18s}
+.ex-modal-yt:hover{background:rgba(255,0,0,.18)}
+
+/* ── EX YOUTUBE BTN (card) ── */
+.ex-yt-btn{width:36px;height:36px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);color:var(--text2);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.ex-yt-btn:hover{background:rgba(232,255,74,.1);border-color:var(--accent);color:var(--accent)}
+
+/* ── 5-6 DAY SCHEDULE IMPROVEMENTS ── */
+.day-tabs{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.75rem;margin-bottom:1rem;scrollbar-width:none}
+.day-tab{flex-shrink:0;padding:.45rem .75rem;background:var(--bg3);border:1px solid var(--border);border-radius:99px;font-size:.7rem;color:var(--text2);cursor:pointer;transition:all .18s;white-space:nowrap}
+
+/* ── EMBEDDED VIDEO PLAYER — used in both exercise modal & kegel page ── */
+.video-player-wrap{margin-bottom:1.2rem}
+.video-player-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem;font-weight:700}
+.video-player-container{position:relative;width:100%;padding-bottom:56.25%;/* 16:9 */height:0;border-radius:var(--radius);overflow:hidden;background:#000;border:1px solid var(--border)}
+.video-player-iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:var(--radius)}
+
+/* ── KEGEL VIDEO SECTION ── */
+.kegel-video-wrap{margin:.75rem 0}
+.kegel-video-label{font-size:.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;font-weight:700;display:flex;align-items:center;gap:.4rem}

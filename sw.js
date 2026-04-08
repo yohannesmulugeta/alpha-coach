@@ -1,5 +1,5 @@
-// Alpha Coach Service Worker
-const CACHE = 'alpha-coach-v1';
+// Alpha Coach Service Worker v3
+const CACHE = 'alpha-coach-v3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -12,7 +12,9 @@ const ASSETS = [
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      .then(c => c.addAll(ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -25,6 +27,10 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  // Don't cache YouTube iframes / API calls
+  if (e.request.url.includes('youtube.com') || e.request.url.includes('youtu.be')) {
+    return;
+  }
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
